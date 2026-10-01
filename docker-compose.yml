@@ -1,0 +1,16 @@
+services:
+  db:
+    image: mysql:8.4
+    container_name: agence_location_db
+    environment:
+      MYSQL_ROOT_PASSWORD: root        # base locale de démonstration
+    ports:
+      - "3306:3306"
+    volumes:
+      # Les scripts sont exécutés dans l'ordre (00 -> 07) au premier démarrage
+      - ./sql:/docker-entrypoint-initdb.d:ro
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-proot"]
+      interval: 5s
+      retries: 20
